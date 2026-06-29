@@ -1,0 +1,264 @@
+ <!DOCTYPE html>
+ <html lang="zh-CN">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+   <meta name="description" content="Only Us - 我们的恋爱纪念网站">
+   <meta name="theme-color" content="#FFF7F5">
+   <!-- 微信分享 -->
+   <meta property="og:title" content="Only Us">
+   <meta property="og:description" content="Every moment with you matters.">
+   <meta property="og:type" content="website">
+   <meta property="og:image" content="/images/og-image.jpg">
+   <title>Only Us</title>
+ 
+   <!-- ========== 字体 ========== -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+ 
+   <!-- ========== Font Awesome 图标库 ========== -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+ 
+   <!-- ========== GSAP 动画引擎 ========== -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+ 
+   <!-- ========== tsParticles 粒子系统 ========== -->
+   <script src="https://cdn.jsdelivr.net/npm/@tsparticles/engine@3.5.0/tsparticles.engine.bundle.min.js" defer></script>
+ 
+   <!-- ========== 配置文件 ========== -->
+   <script src="config.js"></script>
+ 
+   <!-- ========== 样式 ========== -->
+   <link rel="stylesheet" href="style.css">
+ </head>
+ <body>
+ 
+   <!-- ============================================================
+   加载屏幕
+   ============================================================ -->
+   <div id="loading-screen">
+     <div class="loading-heart"><i class="fas fa-heart"></i></div>
+     <div class="loading-text">Loading...</div>
+   </div>
+ 
+   <!-- ============================================================
+   背景音乐控制按钮（右上角悬浮定位）
+   ============================================================ -->
+   <div id="music-btn" class="music-btn" title="播放音乐">
+     <div class="music-icon-wrapper">
+       <i class="fas fa-music"></i>
+     </div>
+     <div class="music-info" id="music-info">
+       <span class="music-title" id="music-title">Love Story</span>
+       <div class="music-volume" id="music-volume">
+         <i class="fas fa-volume-up"></i>
+         <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5">
+       </div>
+     </div>
+   </div>
+ 
+   <!-- ============================================================
+   主容器（scroll-snap 容器）
+   ============================================================ -->
+   <main id="main">
+ 
+     <!-- ====== 第1页：首页 ====== -->
+     <section id="hero" class="section snap-section">
+       <!-- 背景轮播容器 -->
+       <div id="hero-bg" class="hero-bg"></div>
+       <div id="hero-overlay" class="hero-overlay"></div>
+ 
+       <!-- 粒子容器 -->
+       <div id="hero-particles" class="hero-particles"></div>
+ 
+       <!-- 首页内容 -->
+       <div class="hero-content">
+         <h1 class="hero-title" id="hero-title">Only Us</h1>
+         <p class="hero-subtitle" id="hero-subtitle"></p>
+         <button class="hero-btn" id="hero-btn">
+           开始回忆
+           <i class="fas fa-arrow-down"></i>
+         </button>
+       </div>
+ 
+       <!-- 滚动指示器 -->
+       <div class="scroll-indicator">
+         <span>向下滚动</span>
+         <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
+       </div>
+     </section>
+ 
+     <!-- ====== 第2页：相册 · 瀑布流 ====== -->
+     <section id="album" class="section snap-section">
+       <div class="section-header">
+         <h2 class="section-title">📸 我们的相册</h2>
+         <p class="section-desc">点击图片放大查看 · 左右滑动切换</p>
+       </div>
+       <div class="masonry" id="masonry"></div>
+     </section>
+ 
+     <!-- ====== 第3页：故事时间轴 ====== -->
+     <section id="story" class="section snap-section">
+       <div class="section-header">
+         <h2 class="section-title">📖 我们的故事</h2>
+         <p class="section-desc">点击卡片展开 · 回顾每一个重要时刻</p>
+       </div>
+       <div class="timeline" id="timeline"></div>
+     </section>
+ 
+     <!-- ====== 第4页：情话轮播 ====== -->
+     <section id="quotes" class="section snap-section">
+       <div class="section-header">
+         <h2 class="section-title">💌 写给情话</h2>
+       </div>
+       <div class="quotes-carousel" id="quotes-carousel">
+         <div class="quote-card glass" id="quote-card">
+           <i class="fas fa-quote-left quote-icon"></i>
+           <p class="quote-text" id="quote-text"></p>
+         </div>
+         <div class="quote-controls">
+           <button class="quote-btn" id="quote-prev"><i class="fas fa-chevron-left"></i></button>
+           <div class="quote-dots" id="quote-dots"></div>
+           <button class="quote-btn" id="quote-next"><i class="fas fa-chevron-right"></i></button>
+           <button class="quote-btn quote-random" id="quote-random">🎲</button>
+         </div>
+       </div>
+     </section>
+ 
+     <!-- ====== 第5页：互动区 ====== -->
+     <section id="interactive" class="section snap-section">
+       <div class="section-header">
+         <h2 class="section-title">✨ 互动回忆</h2>
+         <p class="section-desc">点击生成爱心 · 双击爱心雨 · 长按告白</p>
+       </div>
+       <div class="interactive-area" id="interactive-area">
+         <canvas id="interactive-canvas"></canvas>
+       </div>
+     </section>
+ 
+     <!-- ====== 第6页：纪念日倒计时 ====== -->
+     <section id="countdown" class="section snap-section">
+       <div class="countdown-bg" id="countdown-bg"></div>
+       <div class="section-header countdown-header">
+         <h2 class="section-title">💝 在一起的日子</h2>
+       </div>
+       <div class="countdown-display" id="countdown-display">
+         <div class="countdown-item">
+           <div class="flip-card" id="flip-days">
+             <div class="flip-inner">
+               <div class="flip-front">0</div>
+               <div class="flip-back">0</div>
+             </div>
+           </div>
+           <span class="countdown-label">天</span>
+         </div>
+         <div class="countdown-item">
+           <div class="flip-card" id="flip-hours">
+             <div class="flip-inner">
+               <div class="flip-front">0</div>
+               <div class="flip-back">0</div>
+             </div>
+           </div>
+           <span class="countdown-label">小时</span>
+         </div>
+         <div class="countdown-item">
+           <div class="flip-card" id="flip-minutes">
+             <div class="flip-inner">
+               <div class="flip-front">0</div>
+               <div class="flip-back">0</div>
+             </div>
+           </div>
+           <span class="countdown-label">分钟</span>
+         </div>
+       </div>
+       <!-- 流星由 JS 动态生成 -->
+     </section>
+ 
+     <!-- ====== 第7页：漂流瓶 ====== -->
+     <section id="bottle" class="section snap-section">
+       <div class="section-header">
+         <h2 class="section-title">🌊 漂流瓶</h2>
+         <p class="section-desc">写下一句话，让它在这里漂流</p>
+       </div>
+       <div class="bottle-container">
+         <div class="bottle-input-area">
+           <textarea id="bottle-input" class="bottle-input" placeholder="写下一句想说的话..." rows="3" maxlength="200"></textarea>
+           <button class="bottle-send" id="bottle-send">
+             <i class="fas fa-paper-plane"></i> 投放漂流瓶
+           </button>
+         </div>
+         <div class="bottle-messages" id="bottle-messages">
+           <div class="bottle-empty">还没有留言，写一条吧 💌</div>
+         </div>
+       </div>
+     </section>
+ 
+     <!-- ====== 页尾 ====== -->
+     <footer id="footer" class="section snap-section">
+       <div class="footer-content">
+         <div class="footer-stars" id="footer-stars"></div>
+         <p class="footer-text">💕 永远热恋中 💕</p>
+         <p class="footer-love">
+           <i class="fas fa-heart"></i>
+           <i class="fas fa-infinity"></i>
+           <i class="fas fa-heart"></i>
+         </p>
+       </div>
+     </footer>
+   </main>
+ 
+   <!-- ============================================================
+   告白模式遮罩层
+   ============================================================ -->
+   <div id="confession-overlay" class="overlay hidden">
+     <div class="confession-content">
+       <h2 class="confession-text" id="confession-text">以后也一起走吧 💕</h2>
+       <p class="confession-sub">—— 长按触发 · 真心告白 ——</p>
+       <button class="confession-back" id="confession-back">
+         <i class="fas fa-arrow-left"></i> 返回主页
+       </button>
+     </div>
+     <!-- 爱心扩散动画容器 -->
+     <div class="confession-hearts" id="confession-hearts"></div>
+     <!-- 烟花容器 -->
+     <div class="confession-fireworks" id="confession-fireworks"></div>
+   </div>
+ 
+   <!-- ============================================================
+   隐藏彩蛋页面
+   ============================================================ -->
+   <div id="easter-egg" class="overlay hidden">
+     <div class="easter-stars" id="easter-stars"></div>
+     <div class="easter-content">
+       <h2 class="easter-text" id="easter-text">谢谢你出现在我的生命里 💫</h2>
+       <div class="easter-hearts" id="easter-hearts"></div>
+       <button class="easter-back" id="easter-back">
+         <i class="fas fa-arrow-left"></i> 返回
+       </button>
+     </div>
+   </div>
+ 
+   <!-- ============================================================
+   灯光箱（Lightbox）
+   ============================================================ -->
+   <div id="lightbox" class="overlay hidden">
+     <button class="lightbox-close" id="lightbox-close"><i class="fas fa-times"></i></button>
+     <button class="lightbox-nav lightbox-prev" id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+     <button class="lightbox-nav lightbox-next" id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+     <div class="lightbox-content">
+       <img id="lightbox-img" src="" alt="">
+       <div class="lightbox-info" id="lightbox-info">
+         <span class="lightbox-date" id="lightbox-date"></span>
+         <span class="lightbox-title" id="lightbox-title"></span>
+         <p class="lightbox-desc" id="lightbox-desc"></p>
+       </div>
+     </div>
+     <div class="lightbox-counter" id="lightbox-counter"></div>
+   </div>
+ 
+   <!-- ========== 主脚本 ========== -->
+   <script src="script.js"></script>
+ </body>
+ </html>
